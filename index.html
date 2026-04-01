@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raj's Coffee | Brewed to Perfection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ===================================
+   CSS VARIABLES (hero-carousel.css)
+=================================== */
+:root {
+  --color-espresso: #2C1810;
+  --color-latte: #C4A484;
+  --color-caramel: #D4A574;
+  --color-cream: #F5F5DC;
+  --color-vanilla: #F3E5AB;
+  --color-coffee-bean: #3B2F2F;
+  --color-off-white: #FAFAFA;
+  --font-display: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'Inter', monospace;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-12: 48px;
+  --space-20: 80px;
+  --gradient-caramel: linear-gradient(135deg, #D4A574 0%, #C4A484 100%);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font-sans); background: #000; overflow-x: hidden; }
+
+/* ===================================
+   NAV
+=================================== */
+.nav-container {
+  position: absolute; top: 0; width: 100%; z-index: 100;
+  padding: 40px 60px; display: flex; justify-content: space-between;
+  align-items: center; box-sizing: border-box; pointer-events: none;
+}
+.nav-container > * { pointer-events: auto; }
+.logo {
+  font-family: 'Playfair Display', serif; font-size: 32px;
+  font-weight: 700; color: #FFF; text-decoration: none; font-style: italic;
+}
+.nav-links { display: flex; gap: 40px; }
+.nav-link {
+  color: #FFF; text-decoration: none; font-size: 14px; font-weight: 500;
+  letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.8;
+  transition: opacity 0.3s; cursor: pointer; background: none; border: none;
+}
+.nav-link:hover, .nav-link.active { opacity: 1; }
+.nav-cart {
+  background: none; border: none; cursor: pointer; color: #FFF; pointer-events: auto;
+  transition: opacity 0.3s;
+}
+.nav-cart:hover { opacity: 0.7; }
+
+/* ===================================
+   HERO CAROUSEL (hero-carousel.css)
+=================================== */
+.hero-carousel {
+  position: relative; width: 100%; height: 100vh;
+  min-height: 700px; overflow: hidden; background-color: var(--color-espresso);
+}
+.carousel-container { position: relative; width: 100%; height: 100%; }
+
+.carousel-slide {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  opacity: 0; visibility: hidden;
+  transition: opacity 1s cubic-bezier(0.4,0,0.2,1), visibility 1s cubic-bezier(0.4,0,0.2,1);
+}
+.carousel-slide.active { opacity: 1; visibility: visible; z-index: 1; }
+
+/* BG images instead of video */
+.carousel-bg {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background-size: cover; background-position: center; z-index: 0;
+  transition: transform 8s ease;
+}
+.carousel-slide.active .carousel-bg { transform: scale(1.05); }
+
+.carousel-overlay { display: none; }
+
+.carousel-content-split {
+  position: relative; width: 100%; height: 100%; pointer-events: none;
+}
+.hero-top-left {
+  position: absolute; top: 140px; left: 60px; max-width: 450px;
+  pointer-events: auto; text-align: left; z-index: 2;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+}
+.hero-bottom-right {
+  position: absolute; bottom: 80px; right: 60px; max-width: 450px;
+  pointer-events: auto; text-align: right;
+  display: flex; flex-direction: column; align-items: flex-end; z-index: 2;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+}
+.carousel-label {
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.25em; color: var(--color-caramel);
+  margin-bottom: 24px;
+}
+.carousel-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(56px, 7vw, 96px); font-weight: 700;
+  line-height: 1.05; letter-spacing: -0.02em; color: #FFF;
+  margin-bottom: 20px; user-select: none;
+}
+.carousel-tagline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(24px, 3vw, 40px); font-weight: 400; font-style: italic;
+  line-height: 1.3; color: rgba(255,255,255,0.9); margin-bottom: 0;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.carousel-description {
+  font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 300;
+  line-height: 1.8; color: rgba(255,255,255,0.95); margin-bottom: 32px; max-width: 440px;
+}
+.carousel-price {
+  display: flex; align-items: baseline; gap: 12px; margin-bottom: 24px; justify-content: flex-end;
+}
+.price-amount { font-family: var(--font-mono); font-size: 48px; font-weight: 700; color: var(--color-caramel); }
+.price-unit { font-size: 16px; color: rgba(255,255,255,0.9); }
+.carousel-cta { display: flex; gap: 16px; flex-wrap: wrap; justify-content: flex-end; }
+
+.carousel-nav {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
+  width: 56px; height: 56px; display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2); border-radius: 50%;
+  cursor: pointer; transition: all 0.3s ease; color: #FFF;
+}
+.carousel-nav:hover { background: rgba(255,255,255,0.2); transform: translateY(-50%) scale(1.1); }
+.carousel-nav--prev { left: 40px; }
+.carousel-nav--next { right: 40px; }
+
+.carousel-pagination {
+  position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%);
+  z-index: 10; display: flex; gap: 12px;
+}
+.pagination-dot {
+  width: 12px; height: 12px; background: rgba(255,255,255,0.3);
+  border: 2px solid transparent; border-radius: 50%;
+  cursor: pointer; transition: all 0.3s ease; padding: 0;
+}
+.pagination-dot:hover { background: rgba(255,255,255,0.5); transform: scale(1.2); }
+.pagination-dot.active { background: var(--color-caramel); border-color: rgba(255,255,255,0.5); width: 32px; border-radius: 999px; }
+
+/* ===================================
+   BUTTONS
+=================================== */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 12px; padding: 16px 32px;
+  background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.4); color: #FFF;
+  font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16,1,0.3,1); border-radius: 2px; text-decoration: none;
+}
+.btn-primary:hover {
+  background: #FFF; color: #000; border-color: #FFF;
+  transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+.btn-primary svg { transition: transform 0.3s ease; }
+.btn-primary:hover svg { transform: translateX(4px); }
+
+/* ===================================
+   PREMIUM VIDEO SECTIONS
+=================================== */
+.premium-video-section {
+  position: relative; height: 80vh; min-height: 600px; overflow: hidden;
+  display: flex; align-items: center; justify-content: center; color: #FFF;
+}
+.premium-video-bg {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  object-fit: cover; z-index: 0; background-size: cover; background-position: center;
+}
+.premium-overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4); z-index: 1;
+}
+.premium-content {
+  position: relative; z-index: 2; text-align: center; max-width: 800px; padding: 0 20px;
+}
+.premium-label {
+  font-family: 'Inter', sans-serif; font-size: 13px; letter-spacing: 0.2em;
+  text-transform: uppercase; font-weight: 600; color: var(--color-caramel);
+  display: block; margin-bottom: 24px;
+}
+.premium-headline {
+  font-family: 'Playfair Display', serif; font-size: 64px; line-height: 1.1;
+  margin-bottom: 32px; font-style: italic;
+}
+.premium-text {
+  font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6;
+  max-width: 600px; margin: 0 auto;
+}
+
+/* ===================================
+   PRODUCTS SECTION (products.css)
+=================================== */
+.products-section { padding: var(--space-20) 0; background: var(--color-cream); }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-6); }
+.section-header { text-align: center; max-width: 700px; margin: 0 auto var(--space-12); }
+.section-label {
+  font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em;
+  color: var(--color-espresso); margin-bottom: 16px;
+}
+.section-headline {
+  font-family: var(--font-display); font-size: clamp(40px, 5vw, 56px);
+  font-weight: 700; color: var(--color-espresso); margin-bottom: 16px;
+}
+.section-description { font-size: 18px; line-height: 1.7; color: var(--color-coffee-bean); }
+.products-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-6); max-width: 1200px; margin: 0 auto; padding: 0 var(--space-6);
+}
+.product-card {
+  position: relative; background: #FFF; border: 1px solid rgba(93,64,55,0.1);
+  border-radius: 20px; overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.4,0,0.2,1); height: 100%; display: flex; flex-direction: column;
+  cursor: pointer;
+}
+.product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(93,64,55,0.15); border-color: var(--color-caramel); }
+.product-card__image-wrapper { position: relative; width: 100%; aspect-ratio: 1; overflow: hidden; background: var(--color-off-white); }
+.product-card__image-wrapper img {
+  width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; display: block;
+}
+.product-card:hover .product-card__image-wrapper img { transform: scale(1.08); }
+.product-card__badge {
+  position: absolute; top: 16px; left: 16px; padding: 6px 12px;
+  background: var(--color-vanilla); color: var(--color-espresso); font-size: 11px;
+  font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; border-radius: 999px; z-index: 10;
+}
+.product-card__content { padding: 24px; flex-grow: 1; display: flex; flex-direction: column; }
+.product-card__title { font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--color-espresso); margin-bottom: 8px; }
+.product-card__description { font-size: 14px; color: var(--color-latte); line-height: 1.6; margin-bottom: 16px; flex-grow: 1; }
+.product-card__price { font-family: var(--font-mono); font-size: 28px; font-weight: 700; color: var(--color-caramel); margin-bottom: 16px; }
+.product-card__btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px;
+  background: var(--color-espresso); color: #FFF; border: none; border-radius: 2px;
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer;
+  transition: all 0.3s ease; width: 100%; justify-content: center;
+}
+.product-card__btn:hover { background: var(--color-caramel); }
+
+/* Modal */
+.product-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+  z-index: 1000; display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.product-modal-overlay.open { display: flex; }
+.product-modal {
+  background: #FFF; border-radius: 24px; max-width: 900px; width: 90%;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.2); position: relative;
+  max-height: 90vh; overflow-y: auto;
+}
+.product-modal__container { padding: var(--space-6); }
+.product-modal__close {
+  position: absolute; top: 20px; right: 20px; width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.05); border: none; border-radius: 50%; font-size: 28px;
+  color: var(--color-espresso); cursor: pointer; transition: all 0.3s ease; z-index: 10;
+}
+.product-modal__close:hover { background: rgba(0,0,0,0.1); transform: rotate(90deg); }
+.product-modal__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+.product-modal__image { border-radius: 16px; overflow: hidden; }
+.product-modal__image img { width: 100%; height: auto; display: block; }
+.product-modal__details { display: flex; flex-direction: column; gap: var(--space-4); }
+.product-modal__title { font-family: var(--font-display); font-size: 36px; font-weight: 700; color: var(--color-espresso); }
+.product-modal__price { font-family: var(--font-mono); font-size: 32px; font-weight: 700; color: var(--color-caramel); }
+.product-modal__description { font-size: 16px; line-height: 1.7; color: var(--color-latte); }
+.btn-large { width: 100%; padding: 20px 40px; font-size: 18px; }
+
+/* Variant pills */
+.variant-group { display: flex; flex-direction: column; gap: 8px; }
+.variant-label { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-espresso); }
+.variant-options { display: flex; gap: 8px; flex-wrap: wrap; }
+.variant-pill {
+  padding: 8px 16px; background: #FFF; border: 2px solid var(--color-cream);
+  border-radius: 12px; cursor: pointer; transition: all 0.3s ease;
+  font-size: 13px; font-weight: 500; color: var(--color-coffee-bean);
+}
+.variant-pill:hover, .variant-pill.selected { background: var(--color-vanilla); border-color: var(--color-caramel); }
+
+/* ===================================
+   FOOTER (footer.css)
+=================================== */
+.big-footer {
+  background-color: #000; color: #FFF; padding: 80px 5% 40px;
+  position: relative; overflow: hidden; margin-top: auto;
+}
+.footer-top {
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; margin-bottom: 120px;
+}
+.footer-col { display: flex; flex-direction: column; }
+.footer-col h4 {
+  font-family: 'Inter', sans-serif; font-size: 12px; text-transform: uppercase;
+  letter-spacing: 0.1em; margin-bottom: 24px; opacity: 0.6; color: #FFF;
+}
+.footer-col a {
+  display: block; color: #FFF; text-decoration: none; font-family: 'Inter', sans-serif;
+  font-size: 14px; margin-bottom: 12px; transition: opacity 0.2s; cursor: pointer;
+}
+.footer-col a:hover { opacity: 0.7; }
+.payment-icons { display: flex; gap: 10px; }
+.payment-icons span {
+  background: #FFF; color: #000; font-size: 10px; font-weight: 700;
+  padding: 4px 6px; border-radius: 2px;
+}
+.footer-brand-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(80px, 18vw, 400px); line-height: 0.8; text-align: center;
+  width: 100%; margin: 0 auto; letter-spacing: -0.04em; white-space: nowrap;
+  margin-bottom: -2%; pointer-events: none; color: #FFF;
+}
+.footer-bottom { display: flex; justify-content: flex-end; padding-top: 40px; }
+.chat-btn {
+  background: #FFF; color: #000; border: none; padding: 12px 24px;
+  border-radius: 30px; font-weight: 600; display: flex; align-items: center; gap: 8px;
+  cursor: pointer; position: fixed; bottom: 30px; right: 30px; z-index: 900;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 0.2s ease;
+  font-family: 'Inter', sans-serif; font-size: 14px;
+}
+.chat-btn:hover { transform: translateY(-2px); }
+
+/* ===================================
+   CART SIDEBAR
+=================================== */
+.cart-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 998;
+  display: none; backdrop-filter: blur(2px);
+}
+.cart-overlay.open { display: block; }
+.cart-sidebar {
+  position: fixed; right: -420px; top: 0; height: 100vh; width: 420px;
+  background: #FFF; z-index: 999; padding: 40px 30px;
+  transition: right 0.4s cubic-bezier(0.16,1,0.3,1);
+  display: flex; flex-direction: column; overflow-y: auto;
+}
+.cart-sidebar.open { right: 0; }
+.cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+.cart-title { font-family: var(--font-display); font-size: 28px; color: var(--color-espresso); }
+.cart-close { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--color-espresso); }
+.cart-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
+.cart-empty-text { font-family: var(--font-display); font-size: 22px; color: var(--color-coffee-bean); font-style: italic; }
+.cart-items { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+.cart-item { display: flex; gap: 16px; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.08); }
+.cart-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; }
+.cart-item-info { flex: 1; }
+.cart-item-name { font-family: var(--font-display); font-size: 16px; color: var(--color-espresso); margin-bottom: 4px; }
+.cart-item-variant { font-size: 12px; color: var(--color-latte); margin-bottom: 8px; }
+.cart-item-price { font-size: 18px; font-weight: 700; color: var(--color-caramel); }
+.cart-item-remove { background: none; border: none; color: var(--color-latte); cursor: pointer; font-size: 18px; }
+.cart-item-remove:hover { color: #c0392b; }
+.cart-footer { border-top: 1px solid rgba(0,0,0,0.1); padding-top: 24px; margin-top: auto; }
+.cart-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.cart-total-label { font-size: 16px; color: var(--color-coffee-bean); font-weight: 600; }
+.cart-total-price { font-size: 28px; font-weight: 700; color: var(--color-caramel); }
+.checkout-btn {
+  width: 100%; padding: 18px; background: var(--color-espresso); color: #FFF; border: none;
+  border-radius: 2px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: background 0.3s;
+}
+.checkout-btn:hover { background: var(--color-caramel); }
+
+/* ===================================
+   BLOG PAGE
+=================================== */
+.page { display: none; }
+.page.active { display: block; }
+
+.blog-page { background-color: #121212; color: #FFF; min-height: 100vh; }
+.blog-nav { padding: 40px 60px; display: flex; justify-content: space-between; align-items: center; }
+.journal-header { padding: 100px 5% 60px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 60px; }
+.journal-title { font-family: 'Playfair Display', serif; font-size: 80px; margin: 0; color: #FFF; }
+.journal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; padding: 0 5% 120px; max-width: 1600px; margin: 0 auto; }
+.blog-card { text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 24px; cursor: pointer; transition: transform 0.3s; }
+.blog-card:hover { transform: translateY(-10px); }
+.blog-card__image img { width: 100%; aspect-ratio: 16/10; object-fit: cover; border-radius: 4px; }
+.blog-card__category { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-latte); }
+.blog-card__title { font-family: 'Playfair Display', serif; font-size: 32px; margin: 0; color: #FFF; }
+.blog-card__link { margin-top: auto; text-decoration: underline; color: #FFF; }
+
+/* ===================================
+   ARTICLE PAGE
+=================================== */
+.article-page { background-color: #FAFAFA; color: #121212; min-height: 100vh; display: flex; flex-direction: column; }
+.article-nav { background: #000; padding: 20px 60px; display: flex; justify-content: space-between; align-items: center; }
+.article-container { max-width: 800px; margin: 0 auto; padding: 80px 20px; flex: 1; }
+.article-header { text-align: center; margin-bottom: 60px; }
+.article-category { font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em; color: #C19A6B; display: block; margin-bottom: 16px; font-weight: 600; }
+.article-title { font-family: 'Playfair Display', serif; font-size: 56px; line-height: 1.1; margin-bottom: 24px; color: #121212; }
+.article-meta { font-size: 14px; color: #888; }
+.article-image { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 4px; margin-bottom: 60px; display: block; }
+.article-content { font-size: 18px; line-height: 1.8; color: #333; }
+.article-content p { margin-bottom: 24px; }
+.article-content h2 { font-family: 'Playfair Display', serif; font-size: 36px; margin: 48px 0 24px; color: #121212; }
+.article-content blockquote { border-left: 4px solid #C19A6B; margin: 40px 0; padding-left: 24px; font-family: 'Playfair Display', serif; font-size: 24px; font-style: italic; color: #555; }
+
+/* ===================================
+   COLLECTIONS PAGE
+=================================== */
+.collections-page { background: var(--color-cream); min-height: 100vh; }
+.collections-hero { background: var(--color-espresso); color: #FFF; padding: 160px 60px 80px; }
+.collections-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(60px, 8vw, 100px); line-height: 1; margin-bottom: 24px; }
+.collections-hero p { font-size: 18px; opacity: 0.8; max-width: 500px; }
+.collections-nav { background: var(--color-espresso); padding: 0px 60px; display: flex; justify-content: space-between; align-items: center; }
+.collections-body { padding: 80px 60px; }
+.collections-title { font-family: var(--font-display); font-size: 40px; color: var(--color-espresso); margin-bottom: 48px; }
+.collections-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 32px; }
+.filter-bar { display: flex; gap: 12px; margin-bottom: 48px; flex-wrap: wrap; }
+.filter-btn {
+  padding: 10px 24px; border-radius: 999px; border: 2px solid var(--color-espresso);
+  background: transparent; color: var(--color-espresso); font-family: 'Inter', sans-serif;
+  font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.3s;
+}
+.filter-btn.active, .filter-btn:hover { background: var(--color-espresso); color: #FFF; }
+
+/* ===================================
+   SCROLL ANIMATIONS
+=================================== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-in { animation: fadeInUp 0.8s ease forwards; }
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+@media (max-width: 1024px) {
+  .carousel-headline { font-size: clamp(40px, 8vw, 56px); }
+  .hero-top-left, .hero-bottom-right {
+    left: 40px; right: auto; text-align: left; align-items: flex-start;
+    position: relative; top: auto; bottom: auto; margin-bottom: 20px;
+  }
+  .carousel-content-split { display: flex; flex-direction: column; justify-content: center; padding: 0 40px; }
+  .journal-grid { grid-template-columns: repeat(2, 1fr); }
+  .product-modal__grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .hero-carousel { min-height: 600px; }
+  .carousel-headline { font-size: 40px; }
+  .carousel-tagline { font-size: 20px; }
+  .carousel-description { display: none; }
+  .price-amount { font-size: 32px; }
+  .carousel-cta { flex-direction: column; width: 100%; }
+  .btn-primary { width: 100%; justify-content: center; }
+  .carousel-nav { width: 44px; height: 44px; }
+  .carousel-nav--prev { left: 10px; }
+  .carousel-nav--next { right: 10px; }
+  .nav-container { padding: 20px 24px; }
+  .footer-top { flex-direction: column; gap: 40px; margin-bottom: 60px; }
+  .footer-brand-title { font-size: 22vw; }
+  .journal-grid { grid-template-columns: 1fr; }
+  .blog-nav, .article-nav { padding: 20px 24px; }
+  .collections-hero { padding: 120px 24px 60px; }
+  .collections-body { padding: 40px 24px; }
+  .collections-nav { padding: 0 24px; }
+  .article-title { font-size: 36px; }
+  .journal-title { font-size: 48px; }
+  .cart-sidebar { width: 100%; right: -100%; }
+}
+
+/* Lenis smooth scroll */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* Page transition */
+.page-wrapper { animation: fadeInUp 0.5s ease; }
+</style>
+</head>
+<body>
+
+<!-- ======= HOME PAGE ======= -->
+<div id="page-home" class="page active page-wrapper">
+
+<!-- Nav -->
+<nav class="nav-container">
+  <a href="#" class="logo" onclick="showPage('home'); return false;">Raj's Coffee</a>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="showPage('home')" id="nav-home">Home</button>
+    <button class="nav-link" onclick="showPage('collections')" id="nav-collections">Shop</button>
+    <button class="nav-link" onclick="showPage('blog')" id="nav-blog">Journal</button>
+  </div>
+  <button class="nav-cart" onclick="toggleCart()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M9 20a1 1 0 100 2 1 1 0 000-2zm9 0a1 1 0 100 2 1 1 0 000-2zM1 1h2.79l1.9 15h13.1l1.2-11H5.25"/>
+    </svg>
+    <span id="cart-count" style="font-size:11px; font-weight:700; background:var(--color-caramel); color:#000; border-radius:50%; width:18px; height:18px; display:inline-flex; align-items:center; justify-content:center; display:none;">0</span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero-carousel" class="hero-carousel">
+  <div class="carousel-container">
+    <!-- Slide 1 -->
+    <div class="carousel-slide active" data-slide="0">
+      <div class="carousel-bg" style="background-image: linear-gradient(to bottom right, #1a0a00, #2C1810, #3d1f10); background-image: url('https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=1600&auto=format&fit=crop'); background-size:cover; background-position:center;"></div>
+      <div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);z-index:1;"></div>
+      <div class="carousel-content-split">
+        <div class="hero-top-left">
+          <p class="carousel-label">SIGNATURE BLEND</p>
+          <h1 class="carousel-headline">Dark Espresso</h1>
+          <p class="carousel-tagline">Bold, intense, unforgettable.</p>
+        </div>
+        <div class="hero-bottom-right">
+          <p class="carousel-description">Rich Arabica beans roasted to perfection.</p>
+          <div class="carousel-price"><span class="price-amount">₹899</span><span class="price-unit">per 250g</span></div>
+          <div class="carousel-cta">
+            <button class="btn-primary" onclick="scrollToProducts()">Shop Now <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Slide 2 -->
+    <div class="carousel-slide" data-slide="1">
+      <div class="carousel-bg" style="background-image: url('https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=1600&auto=format&fit=crop'); background-size:cover; background-position:center;"></div>
+      <div style="position:absolute;inset:0;background:rgba(20,10,0,0.4);z-index:1;"></div>
+      <div class="carousel-content-split">
+        <div class="hero-top-left">
+          <p class="carousel-label">PREMIUM ROAST</p>
+          <h1 class="carousel-headline">Vanilla French</h1>
+          <p class="carousel-tagline">Smooth, sweet, elegant.</p>
+        </div>
+        <div class="hero-bottom-right">
+          <div class="carousel-price"><span class="price-amount">₹999</span></div>
+          <div class="carousel-cta"><button class="btn-primary" onclick="scrollToProducts()">Shop Now <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+        </div>
+      </div>
+    </div>
+    <!-- Slide 3 -->
+    <div class="carousel-slide" data-slide="2">
+      <div class="carousel-bg" style="background-image: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1600&auto=format&fit=crop'); background-size:cover; background-position:center;"></div>
+      <div style="position:absolute;inset:0;background:rgba(10,5,0,0.5);z-index:1;"></div>
+      <div class="carousel-content-split">
+        <div class="hero-top-left">
+          <p class="carousel-label">SEASONAL</p>
+          <h1 class="carousel-headline">Hazelnut Brew</h1>
+          <p class="carousel-tagline">Warm, nutty, divine.</p>
+        </div>
+        <div class="hero-bottom-right">
+          <div class="carousel-price"><span class="price-amount">₹999</span></div>
+          <div class="carousel-cta"><button class="btn-primary" onclick="scrollToProducts()">Shop Now <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Nav Arrows -->
+  <button class="carousel-nav carousel-nav--prev" onclick="prevSlide()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18L9 12L15 6"/></svg></button>
+  <button class="carousel-nav carousel-nav--next" onclick="nextSlide()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6L15 12L9 18"/></svg></button>
+  <div class="carousel-pagination">
+    <button class="pagination-dot active" onclick="goToSlide(0)"></button>
+    <button class="pagination-dot" onclick="goToSlide(1)"></button>
+    <button class="pagination-dot" onclick="goToSlide(2)"></button>
+  </div>
+</section>
+
+<!-- THE ROAST -->
+<section class="premium-video-section">
+  <div class="premium-video-bg" style="background-image: url('https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=1600&auto=format&fit=crop'); background-size:cover; background-position:center;"></div>
+  <div class="premium-overlay" style="background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8));"></div>
+  <div class="premium-content">
+    <span class="premium-label">THE PROCESS</span>
+    <h2 class="premium-headline">Masterfully Roasted</h2>
+    <p class="premium-text">We coax out the hidden flavors of every bean. The heat is our brush, the bean our canvas.</p>
+  </div>
+</section>
+
+<!-- THE GRIND -->
+<section class="premium-video-section" style="height: 60vh;">
+  <div class="premium-video-bg" style="background-image: url('https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?w=1600&auto=format&fit=crop'); background-size:cover; background-position:center;"></div>
+  <div class="premium-overlay" style="background: rgba(0,0,0,0.3);"></div>
+  <div class="premium-content" style="text-align: left; margin-left: 0; max-width: 1200px; width: 100%; padding: 0 60px;">
+    <div style="max-width: 500px;">
+      <span class="premium-label" style="color:#FFF;">PRECISION</span>
+      <h2 class="premium-headline" style="font-size: 64px;">The Perfect Grind</h2>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products" class="products-section">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">OUR COLLECTION</p>
+      <h2 class="section-headline">Discover Our Coffees</h2>
+    </div>
+  </div>
+  <div class="products-grid">
+    <div class="product-card" onclick="openModal('dark-espresso')">
+      <div class="product-card__image-wrapper">
+        <img src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&auto=format&fit=crop" alt="Dark Espresso Shot">
+        <span class="product-card__badge">Best Seller</span>
+      </div>
+      <div class="product-card__content">
+        <div class="product-card__title">Dark Espresso Shot</div>
+        <div class="product-card__description">Rich Arabica beans from the highlands of Karnataka, roasted to a deep, chocolatey perfection.</div>
+        <div class="product-card__price">₹899</div>
+        <button class="product-card__btn">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card" onclick="openModal('vanilla-french')">
+      <div class="product-card__image-wrapper">
+        <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&auto=format&fit=crop" alt="Vanilla French Roast">
+        <span class="product-card__badge">Premium</span>
+      </div>
+      <div class="product-card__content">
+        <div class="product-card__title">Vanilla French Roast</div>
+        <div class="product-card__description">Smooth, velvety blend with natural vanilla notes. A luxurious cup for every morning ritual.</div>
+        <div class="product-card__price">₹999</div>
+        <button class="product-card__btn">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card" onclick="openModal('hazelnut-brew')">
+      <div class="product-card__image-wrapper">
+        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&auto=format&fit=crop" alt="Hazelnut Brew">
+        <span class="product-card__badge">Seasonal</span>
+      </div>
+      <div class="product-card__content">
+        <div class="product-card__title">Hazelnut Brew</div>
+        <div class="product-card__description">Warm hazelnut sweetness meets medium-dark roast. Comfort in every sip.</div>
+        <div class="product-card__price">₹999</div>
+        <button class="product-card__btn">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product-card" onclick="openModal('cold-brew')">
+      <div class="product-card__image-wrapper">
+        <img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=600&auto=format&fit=crop" alt="Cold Brew Concentrate">
+      </div>
+      <div class="product-card__content">
+        <div class="product-card__title">Cold Brew Concentrate</div>
+        <div class="product-card__description">Steeped 18 hours for ultra-smooth, low-acid refreshment. Dilute, pour, enjoy.</div>
+        <div class="product-card__price">₹1,199</div>
+        <button class="product-card__btn">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE EXTRACTION -->
+<section class="premium-video-section">
+  <div class="premium-video-bg" style="background-image: url('https://images.unsplash.com/photo-1498804103079-a6351b050096?w=1600&auto=format&fit=crop'); background-size:cover; background-position:center;"></div>
+  <div class="premium-overlay" style="background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.8) 100%);"></div>
+  <div class="premium-content">
+    <span class="premium-label">LIQUID GOLD</span>
+    <h2 class="premium-headline">The Extraction</h2>
+    <p class="premium-text">The final moment of truth. Water meets coffee in a delicate dance.</p>
+  </div>
+</section>
+
+<!-- BIG FOOTER -->
+<footer class="big-footer">
+  <div class="footer-top">
+    <div class="footer-col"><h4>Services</h4><a href="#">Wholesale</a><a href="#">Subscriptions</a></div>
+    <div class="footer-col"><h4>Contact</h4><a href="#">Support</a><a href="#">Careers</a></div>
+    <div class="footer-col"><h4>Connect</h4><a href="#">Instagram</a><a href="#">Twitter</a></div>
+    <div class="footer-col"><h4>Pay Safely</h4><div class="payment-icons"><span>VISA</span><span>MC</span><span>UPI</span></div></div>
+  </div>
+  <div class="footer-brand-title">RAJ'S COFFEE</div>
+</footer>
+</div>
+
+<!-- ======= COLLECTIONS PAGE ======= -->
+<div id="page-collections" class="page page-wrapper">
+  <div class="collections-page">
+    <nav class="collections-nav" style="position:absolute;top:0;width:100%;z-index:100;background:transparent;padding:40px 60px;display:flex;justify-content:space-between;align-items:center;">
+      <a href="#" class="logo" onclick="showPage('home'); return false;" style="color:#FFF;">Raj's Coffee</a>
+      <div class="nav-links">
+        <button class="nav-link" onclick="showPage('home')">Home</button>
+        <button class="nav-link active">Shop</button>
+        <button class="nav-link" onclick="showPage('blog')">Journal</button>
+      </div>
+      <button class="nav-cart" onclick="toggleCart()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 20a1 1 0 100 2 1 1 0 000-2zm9 0a1 1 0 100 2 1 1 0 000-2zM1 1h2.79l1.9 15h13.1l1.2-11H5.25"/></svg>
+      </button>
+    </nav>
+    <div class="collections-hero" style="position:relative;overflow:hidden;">
+      <div style="position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=1600&auto=format&fit=crop');background-size:cover;background-position:center;opacity:0.3;"></div>
+      <div style="position:relative;z-index:1;">
+        <h1 class="collections-hero" style="font-family:'Playfair Display',serif;font-size:clamp(60px,8vw,100px);line-height:1;margin-bottom:24px;color:#FFF;padding:0;">All Coffees</h1>
+        <p style="font-size:18px;opacity:0.8;max-width:500px;color:#FFF;">From single origins to signature blends — every bean tells a story.</p>
+      </div>
+    </div>
+    <div class="collections-body">
+      <div class="filter-bar">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Espresso</button>
+        <button class="filter-btn">Pour Over</button>
+        <button class="filter-btn">Cold Brew</button>
+        <button class="filter-btn">Seasonal</button>
+      </div>
+      <div class="products-grid">
+        <div class="product-card" onclick="openModal('dark-espresso')">
+          <div class="product-card__image-wrapper">
+            <img src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&auto=format&fit=crop" alt="Dark Espresso Shot">
+            <span class="product-card__badge">Best Seller</span>
+          </div>
+          <div class="product-card__content">
+            <div class="product-card__title">Dark Espresso Shot</div>
+            <div class="product-card__description">Rich Arabica beans roasted to a deep, chocolatey perfection.</div>
+            <div class="product-card__price">₹899</div>
+            <button class="product-card__btn">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card" onclick="openModal('vanilla-french')">
+          <div class="product-card__image-wrapper">
+            <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&auto=format&fit=crop" alt="Vanilla French Roast">
+            <span class="product-card__badge">Premium</span>
+          </div>
+          <div class="product-card__content">
+            <div class="product-card__title">Vanilla French Roast</div>
+            <div class="product-card__description">Smooth, velvety blend with natural vanilla notes.</div>
+            <div class="product-card__price">₹999</div>
+            <button class="product-card__btn">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card" onclick="openModal('hazelnut-brew')">
+          <div class="product-card__image-wrapper">
+            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&auto=format&fit=crop" alt="Hazelnut Brew">
+            <span class="product-card__badge">Seasonal</span>
+          </div>
+          <div class="product-card__content">
+            <div class="product-card__title">Hazelnut Brew</div>
+            <div class="product-card__description">Warm hazelnut sweetness meets medium-dark roast.</div>
+            <div class="product-card__price">₹999</div>
+            <button class="product-card__btn">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card" onclick="openModal('cold-brew')">
+          <div class="product-card__image-wrapper">
+            <img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=600&auto=format&fit=crop" alt="Cold Brew">
+          </div>
+          <div class="product-card__content">
+            <div class="product-card__title">Cold Brew Concentrate</div>
+            <div class="product-card__description">Steeped 18 hours for ultra-smooth refreshment.</div>
+            <div class="product-card__price">₹1,199</div>
+            <button class="product-card__btn">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card" onclick="openModal('single-origin')">
+          <div class="product-card__image-wrapper">
+            <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&auto=format&fit=crop" alt="Single Origin">
+          </div>
+          <div class="product-card__content">
+            <div class="product-card__title">Coorg Single Origin</div>
+            <div class="product-card__description">Traceable, sustainable beans from Coorg estates. Complex floral notes.</div>
+            <div class="product-card__price">₹1,499</div>
+            <button class="product-card__btn">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card" onclick="openModal('filter-blend')">
+          <div class="product-card__image-wrapper">
+            <img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?w=600&auto=format&fit=crop" alt="Filter Blend">
+          </div>
+          <div class="product-card__content">
+            <div class="product-card__title">Filter House Blend</div>
+            <div class="product-card__description">Perfectly balanced for pour-over or drip. Bright, clean, satisfying.</div>
+            <div class="product-card__price">₹799</div>
+            <button class="product-card__btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="big-footer">
+      <div class="footer-top">
+        <div class="footer-col"><h4>Services</h4><a href="#">Wholesale</a><a href="#">Subscriptions</a></div>
+        <div class="footer-col"><h4>Contact</h4><a href="#">Support</a><a href="#">Careers</a></div>
+        <div class="footer-col"><h4>Connect</h4><a href="#">Instagram</a><a href="#">Twitter</a></div>
+        <div class="footer-col"><h4>Pay Safely</h4><div class="payment-icons"><span>VISA</span><span>MC</span><span>UPI</span></div></div>
+      </div>
+      <div class="footer-brand-title">RAJ'S COFFEE</div>
+    </footer>
+  </div>
+</div>
+
+<!-- ======= BLOG PAGE ======= -->
+<div id="page-blog" class="page page-wrapper">
+  <div class="blog-page">
+    <nav class="blog-nav nav-container" style="position:relative;background:#121212;">
+      <a href="#" class="logo" onclick="showPage('home'); return false;">Raj's Coffee</a>
+      <div class="nav-links">
+        <button class="nav-link" onclick="showPage('home')">Home</button>
+        <button class="nav-link" onclick="showPage('collections')">Shop</button>
+        <button class="nav-link active">Journal</button>
+      </div>
+    </nav>
+    <header class="journal-header"><h1 class="journal-title">The Journal</h1></header>
+    <div class="journal-grid">
+      <a class="blog-card" onclick="showArticle('art-of-pour')">
+        <div class="blog-card__image"><img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=600&auto=format&fit=crop" alt="Pour over"></div>
+        <div class="blog-card__content">
+          <span class="blog-card__category">Brewing Guide</span>
+          <h2 class="blog-card__title">The Art of the Pour</h2>
+          <span class="blog-card__link">Read Article &rarr;</span>
+        </div>
+      </a>
+      <a class="blog-card" onclick="showArticle('sourcing-sustainability')">
+        <div class="blog-card__image"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&auto=format&fit=crop" alt="Farm"></div>
+        <div class="blog-card__content">
+          <span class="blog-card__category">Sustainability</span>
+          <h2 class="blog-card__title">Sourcing with Mind</h2>
+          <span class="blog-card__link">Read Article &rarr;</span>
+        </div>
+      </a>
+      <a class="blog-card" onclick="showArticle('espresso-science')">
+        <div class="blog-card__image"><img src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&auto=format&fit=crop" alt="Espresso"></div>
+        <div class="blog-card__content">
+          <span class="blog-card__category">Science of Coffee</span>
+          <h2 class="blog-card__title">Inside the Espresso Pull</h2>
+          <span class="blog-card__link">Read Article &rarr;</span>
+        </div>
+      </a>
+    </div>
+    <footer class="big-footer">
+      <div class="footer-brand-title">RAJ'S COFFEE</div>
+    </footer>
+  </div>
+</div>
+
+<!-- ======= ARTICLE PAGE ======= -->
+<div id="page-article" class="page page-wrapper">
+  <div class="article-page">
+    <nav class="article-nav">
+      <a href="#" class="logo" onclick="showPage('home'); return false;" style="font-size:24px;">Raj's Coffee</a>
+      <div class="nav-links">
+        <button class="nav-link" onclick="showPage('home')">Home</button>
+        <button class="nav-link" onclick="showPage('collections')">Shop</button>
+        <button class="nav-link" onclick="showPage('blog')">Journal</button>
+      </div>
+    </nav>
+    <main class="article-container" id="article-main"></main>
+    <footer class="big-footer">
+      <div class="footer-brand-title">RAJ'S COFFEE</div>
+    </footer>
+  </div>
+</div>
+
+<!-- ======= PRODUCT MODAL ======= -->
+<div class="product-modal-overlay" id="product-modal" onclick="closeModalOnBackdrop(event)">
+  <div class="product-modal">
+    <div class="product-modal__container">
+      <button class="product-modal__close" onclick="closeModal()">&times;</button>
+      <div class="product-modal__grid" id="modal-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======= CART SIDEBAR ======= -->
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cart-sidebar">
+  <div class="cart-header">
+    <div class="cart-title">Your Bag</div>
+    <button class="cart-close" onclick="toggleCart()">&times;</button>
+  </div>
+  <div id="cart-content">
+    <div class="cart-empty">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#C4A484" stroke-width="1.5"><path d="M9 20a1 1 0 100 2 1 1 0 000-2zm9 0a1 1 0 100 2 1 1 0 000-2zM1 1h2.79l1.9 15h13.1l1.2-11H5.25"/></svg>
+      <div class="cart-empty-text">Your bag is empty</div>
+      <button class="btn-primary" onclick="showPage('collections'); toggleCart();" style="margin-top:8px;">Browse Coffees</button>
+    </div>
+  </div>
+</div>
+
+<!-- Chat Button -->
+<button class="chat-btn">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+  Chat with us
+</button>
+
+<script>
+// ===================================
+// CAROUSEL (carousel.js)
+// ===================================
+let currentSlide = 0;
+const totalSlides = 3;
+let autoplayInterval;
+const AUTOPLAY_DELAY = 7000;
+
+document.addEventListener('DOMContentLoaded', () => { startAutoplay(); });
+
+function goToSlide(slideIndex) {
+  stopAutoplay();
+  const slides = document.querySelectorAll('.carousel-slide');
+  const dots = document.querySelectorAll('.pagination-dot');
+  if (!slides.length) return;
+  slides[currentSlide].classList.remove('active');
+  dots[currentSlide].classList.remove('active');
+  currentSlide = slideIndex;
+  slides[currentSlide].classList.add('active');
+  dots[currentSlide].classList.add('active');
+  setTimeout(() => startAutoplay(), 3000);
+}
+function nextSlide() { goToSlide((currentSlide + 1) % totalSlides); }
+function prevSlide() { goToSlide((currentSlide - 1 + totalSlides) % totalSlides); }
+function startAutoplay() {
+  stopAutoplay();
+  autoplayInterval = setInterval(() => {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.pagination-dot');
+    if (!slides.length) return;
+    slides[currentSlide].classList.remove('active');
+    dots[currentSlide].classList.remove('active');
+    currentSlide = (currentSlide + 1) % totalSlides;
+    slides[currentSlide].classList.add('active');
+    dots[currentSlide].classList.add('active');
+  }, AUTOPLAY_DELAY);
+}
+function stopAutoplay() { if (autoplayInterval) clearInterval(autoplayInterval); }
+function scrollToProducts() {
+  const p = document.getElementById('products');
+  if (p) p.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ===================================
+// ROUTING
+// ===================================
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Restart carousel when going home
+  if (page === 'home') { stopAutoplay(); startAutoplay(); }
+}
+
+// ===================================
+// ARTICLE
+// ===================================
+const articles = {
+  'art-of-pour': {
+    title: "The Art of the Pour",
+    category: "Brewing Guide",
+    date: "Oct 12, 2025",
+    image: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=1200&auto=format&fit=crop",
+    content: `<p>There is a moment of stillness just before the water hits the grounds — a breath held between craft and chemistry. Pour-over coffee is not merely a brewing method; it is a practice, a meditation in patience and precision.</p>
+    <h2>Consistency is Key</h2>
+    <p>Why does your morning cup sometimes taste divine and other times fall flat? The answer almost always lives in consistency. The grind size, the water temperature, the pour rate — each variable compounds on the last.</p>
+    <blockquote>"The coffee tells you when it's ready. You just have to learn to listen."</blockquote>
+    <p>We recommend starting with a 1:16 coffee-to-water ratio. Use water at 93°C — never boiling — and begin with a 45-second bloom pour, just enough to saturate all the grounds. Then, in slow, steady spirals, pour the remaining water in 3–4 stages.</p>
+    <h2>The Grind</h2>
+    <p>For pour-over, aim for a medium-coarse grind — roughly the texture of coarse sea salt. Too fine and you'll over-extract, producing bitterness. Too coarse and you'll under-extract, leaving sourness and thin body behind.</p>`
+  },
+  'sourcing-sustainability': {
+    title: "Sourcing with Sustainability",
+    category: "Behind the Beans",
+    date: "Sept 28, 2025",
+    image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=1200&auto=format&fit=crop",
+    content: `<p>Great coffee starts long before the roaster. It begins in the soil — in the relationship between a farmer and their land, between a harvest and the hands that picked it.</p>
+    <blockquote>"Sustainability isn't a buzzword. It's the only way forward."</blockquote>
+    <p>At Raj's Coffee, every bean we source is traceable to its farm. We visit our partner estates annually, building relationships that go beyond transactions. We pay above Fair Trade prices because quality and fairness are inseparable.</p>
+    <h2>The Coorg Connection</h2>
+    <p>Our flagship Single Origin comes from a 200-acre estate in the Coorg hills. Shade-grown under native silver oak trees, these beans develop slowly, accumulating the complex flavors that make them extraordinary. The estate employs 60 permanent staff and provides housing, education, and healthcare.</p>`
+  },
+  'espresso-science': {
+    title: "Inside the Espresso Pull",
+    category: "Science of Coffee",
+    date: "Nov 5, 2025",
+    image: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=1200&auto=format&fit=crop",
+    content: `<p>An espresso shot lasts approximately 25–30 seconds. In that brief window, hot water at 9 bars of pressure extracts hundreds of chemical compounds from finely-ground coffee — oils, acids, sugars, and Maillard reaction products that give espresso its signature complexity.</p>
+    <h2>The Variables</h2>
+    <p>Dose, yield, time, temperature, pressure — every variable interacts. A 18g dose yielding 36g of espresso in 27 seconds at 93°C is a classic starting point. But espresso is alive; it shifts with humidity, bean freshness, and even altitude.</p>
+    <blockquote>"A perfect espresso is a perfect argument against simplicity."</blockquote>
+    <p>The crema — that golden-brown foam — is formed by CO₂ released during extraction, emulsified with oils into a colloid. Fresh beans produce more crema. Overly fresh beans (within 3 days of roasting) produce too much, pushing out flavors you want.</p>`
+  }
+};
+
+function showArticle(handle) {
+  const art = articles[handle];
+  if (!art) return;
+  document.getElementById('article-main').innerHTML = `
+    <div class="article-header">
+      <span class="article-category">${art.category}</span>
+      <h1 class="article-title">${art.title}</h1>
+      <div class="article-meta">${art.date}</div>
+    </div>
+    <img src="${art.image}" class="article-image" alt="${art.title}">
+    <article class="article-content">${art.content}</article>
+    <div style="margin-top:48px;">
+      <button onclick="showPage('blog')" class="btn-primary" style="background:var(--color-espresso);color:#FFF;border-color:var(--color-espresso);">← Back to Journal</button>
+    </div>
+  `;
+  showPage('article');
+}
+
+// ===================================
+// PRODUCT MODAL
+// ===================================
+const products = {
+  'dark-espresso': {
+    title: 'Dark Espresso Shot', price: '₹899', image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&auto=format&fit=crop',
+    description: 'Rich Arabica beans from the highlands of Karnataka, roasted to a deep, chocolatey perfection. Notes of dark chocolate, tobacco, and a lingering caramel finish.',
+    variants: ['250g', '500g', '1kg']
+  },
+  'vanilla-french': {
+    title: 'Vanilla French Roast', price: '₹999', image: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&auto=format&fit=crop',
+    description: 'Smooth, velvety blend with natural vanilla notes. A luxurious cup for every morning ritual. Medium roast with natural vanilla infusion.',
+    variants: ['250g', '500g']
+  },
+  'hazelnut-brew': {
+    title: 'Hazelnut Brew', price: '₹999', image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&auto=format&fit=crop',
+    description: 'Warm hazelnut sweetness meets medium-dark roast. Comfort in every sip. Perfect for cold mornings and quiet evenings.',
+    variants: ['250g', '500g']
+  },
+  'cold-brew': {
+    title: 'Cold Brew Concentrate', price: '₹1,199', image: 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=600&auto=format&fit=crop',
+    description: 'Steeped 18 hours for ultra-smooth, low-acid refreshment. Dilute 1:1 with water or milk and pour over ice.',
+    variants: ['500ml', '1L']
+  },
+  'single-origin': {
+    title: 'Coorg Single Origin', price: '₹1,499', image: 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&auto=format&fit=crop',
+    description: 'Traceable, sustainable beans from Coorg estates. Complex floral notes with honey sweetness and a bright citrus finish.',
+    variants: ['150g', '250g', '500g']
+  },
+  'filter-blend': {
+    title: 'Filter House Blend', price: '₹799', image: 'https://images.unsplash.com/photo-1498804103079-a6351b050096?w=600&auto=format&fit=crop',
+    description: 'Perfectly balanced for pour-over or drip. Bright, clean, satisfying. The perfect everyday cup.',
+    variants: ['250g', '500g', '1kg']
+  }
+};
+
+let selectedVariant = {};
+
+function openModal(handle) {
+  const p = products[handle];
+  if (!p) return;
+  selectedVariant[handle] = p.variants[0];
+  const variantPills = p.variants.map((v, i) =>
+    `<button class="variant-pill ${i===0?'selected':''}" onclick="selectVariant('${handle}', '${v}', this)">${v}</button>`
+  ).join('');
+  document.getElementById('modal-content').innerHTML = `
+    <div class="product-modal__image"><img src="${p.image}" alt="${p.title}"></div>
+    <div class="product-modal__details">
+      <div class="product-modal__title">${p.title}</div>
+      <div class="product-modal__price">${p.price}</div>
+      <div class="product-modal__description">${p.description}</div>
+      <div class="variant-group">
+        <div class="variant-label">Size</div>
+        <div class="variant-options">${variantPills}</div>
+      </div>
+      <button class="btn-primary btn-large" onclick="addToCart('${handle}')">Add to Bag &nbsp;+</button>
+    </div>
+  `;
+  document.getElementById('product-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function selectVariant(handle, variant, el) {
+  selectedVariant[handle] = variant;
+  el.closest('.variant-options').querySelectorAll('.variant-pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function closeModal() {
+  document.getElementById('product-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOnBackdrop(e) {
+  if (e.target === document.getElementById('product-modal')) closeModal();
+}
+
+// ===================================
+// CART
+// ===================================
+let cartItems = [];
+
+function toggleCart() {
+  const sidebar = document.getElementById('cart-sidebar');
+  const overlay = document.getElementById('cart-overlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('open');
+  document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+  renderCart();
+}
+
+function addToCart(handle) {
+  const p = products[handle];
+  const variant = selectedVariant[handle] || p.variants[0];
+  const existing = cartItems.find(i => i.handle === handle && i.variant === variant);
+  if (existing) { existing.qty++; } 
+  else { cartItems.push({ handle, title: p.title, price: p.price, image: p.image, variant, qty: 1 }); }
+  closeModal();
+  updateCartCount();
+  toggleCart();
+}
+
+function removeFromCart(handle, variant) {
+  cartItems = cartItems.filter(i => !(i.handle === handle && i.variant === variant));
+  updateCartCount();
+  renderCart();
+}
+
+function updateCartCount() {
+  const total = cartItems.reduce((s, i) => s + i.qty, 0);
+  const el = document.getElementById('cart-count');
+  if (total > 0) { el.style.display = 'inline-flex'; el.textContent = total; }
+  else { el.style.display = 'none'; }
+}
+
+function renderCart() {
+  const el = document.getElementById('cart-content');
+  if (cartItems.length === 0) {
+    el.innerHTML = `<div class="cart-empty">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#C4A484" stroke-width="1.5"><path d="M9 20a1 1 0 100 2 1 1 0 000-2zm9 0a1 1 0 100 2 1 1 0 000-2zM1 1h2.79l1.9 15h13.1l1.2-11H5.25"/></svg>
+      <div class="cart-empty-text">Your bag is empty</div>
+      <button class="btn-primary" onclick="showPage('collections'); toggleCart();" style="margin-top:8px;">Browse Coffees</button>
+    </div>`;
+    return;
+  }
+  const total = cartItems.reduce((s, i) => {
+    const num = parseInt(i.price.replace(/[₹,]/g, ''));
+    return s + num * i.qty;
+  }, 0);
+  const itemsHtml = cartItems.map(i => `
+    <div class="cart-item">
+      <img src="${i.image}" alt="${i.title}">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${i.title}</div>
+        <div class="cart-item-variant">${i.variant} × ${i.qty}</div>
+        <div class="cart-item-price">${i.price}</div>
+      </div>
+      <button class="cart-item-remove" onclick="removeFromCart('${i.handle}','${i.variant}')">×</button>
+    </div>
+  `).join('');
+  el.innerHTML = `
+    <div class="cart-items">${itemsHtml}</div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <div class="cart-total-label">Total</div>
+        <div class="cart-total-price">₹${total.toLocaleString('en-IN')}</div>
+      </div>
+      <button class="checkout-btn" onclick="alert('Checkout coming soon! 🛒')">Proceed to Checkout</button>
+    </div>
+  `;
+}
+
+// Filter buttons (collections)
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+</script>
+</body>
+  </html>
